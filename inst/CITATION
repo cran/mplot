@@ -1,0 +1,7 @@
+bibentry("Manual",
+   title = "mplot: Graphical model stability and model selection procedures",
+   author = person("Garth Tarr", "Samuel Mueller", "Alan Welsh"),
+   year   = 2014,
+   url    = "https://github.com/garthtarr/mplot",
+   mheader = "To cite mplot in publications use:"
+)
