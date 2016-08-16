@@ -5,7 +5,7 @@
 \title{The adaptive fence procedure}
 \usage{
 af(mf, B = 60, n.c = 20, initial.stepwise = FALSE, force.in = NULL,
-  n.cores, nvmax, c.max, screen = FALSE, ...)
+  cores, nvmax, c.max, screen = FALSE, ...)
 }
 \arguments{
 \item{mf}{a fitted 'full' model, the result of a call
@@ -23,7 +23,7 @@ should be focussed. See details for implementation.}
 \item{force.in}{the names of variables that should be forced
 into all estimated models}
 
-\item{n.cores}{number of cores to be used when parallel
+\item{cores}{number of cores to be used when parallel
 processing the bootstrap}
 
 \item{nvmax}{size of the largest model that can still be
@@ -90,6 +90,9 @@ then it will be the only model at that size that passes the fence over a
 range of values of c.
 The result is more pronounced peaks which can help to determine
 the location of the correct peak and identify the optimal c*.
+
+See \code{?plot.af} or \code{help("plot.af")} for details of the
+plot method associated with the result.
 }
 \examples{
 n = 100
@@ -105,7 +108,7 @@ y = 1 + x1 + x2 + e
 dat = data.frame(y,x1,x2,x3,x4,x5,x6)
 lm1 = lm(y~.,data=dat)
 \dontrun{
-af1 = af(lm1, n.cores=4, initial.stepwise=TRUE)
+af1 = af(lm1, cores=4, initial.stepwise=TRUE)
 summary(af1)
 plot(af1)
 }
@@ -118,5 +121,8 @@ Jiang J., Nguyen T., Sunil Rao J. (2009),
   Jiang J., Sunil Rao J., Gu Z, Nguyen T. (2008),
   Fence methods for mixed model selection, Annals of Statistics,
   36(4):1669-1692. doi: 10.1214/07-AOS517
+}
+\seealso{
+\code{\link{plot.af}}
 }
 

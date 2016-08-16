@@ -4,13 +4,13 @@
 \alias{plot.vis}
 \title{Plot diagnostics for a vis object}
 \usage{
-\method{plot}{vis}(x, highlight, classic = FALSE, tag = NULL,
-  shiny = FALSE, which = c("vip", "lvk", "boot"), width = 800,
-  height = 400, fontSize = 12, left = 50, top = 30,
+\method{plot}{vis}(x, highlight, interactive = FALSE, classic = NULL,
+  tag = NULL, shiny = FALSE, which = c("vip", "lvk", "boot"),
+  width = 800, height = 400, fontSize = 12, left = 50, top = 30,
   chartWidth = "60\%", chartHeight = "80\%", axisTitlesPosition = "out",
-  dataOpacity = 0.5, options = NULL, ylim,
+  dataOpacity = 0.5, options = NULL, ylim, legend.position = "right",
   backgroundColor = "transparent", text = FALSE, min.prob = 0.4,
-  srt = -30, max.circle = 0.35, print.full.model = FALSE, jitterk = 0.1,
+  srt = 45, max.circle = 15, print.full.model = FALSE, jitterk = 0.1,
   ...)
 }
 \arguments{
@@ -18,16 +18,22 @@
 
 \item{highlight}{the name of a variable that will be highlighted}
 
-\item{classic}{logical.  If \code{classic=TRUE} a
+\item{interactive}{logical.  If \code{interactive=TRUE} a
+googleVis plot is provided instead of the base graphics plot.
+Default is \code{interactive=FALSE}.}
+
+\item{classic}{logical.  Depricated. If \code{classic=TRUE} a
 base graphics plot is provided instead of a googleVis plot.
-Default is \code{classic=FALSE}.}
+For now specifying \code{classic} will overwrite the
+default \code{interactive} behaviour, though this is
+likely to be removed in the future.}
 
-\item{tag}{Default NULL. Name tag of the objects to be extracted 
-from a gvis (googleVis) object. 
+\item{tag}{Default NULL. Name tag of the objects to be extracted
+from a gvis (googleVis) object.
 
-The default tag for is NULL, which will 
-result in R opening a browser window.  Setting \code{tag='chart'} 
-or setting \code{options(gvis.plot.tag='chart')} is useful when 
+The default tag for is NULL, which will
+result in R opening a browser window.  Setting \code{tag='chart'}
+or setting \code{options(gvis.plot.tag='chart')} is useful when
 googleVis is used in scripts, like knitr or rmarkdown.}
 
 \item{shiny}{Default FALSE. Set to TRUE when using in a shiny interface.}
@@ -74,6 +80,10 @@ complete control over the output.  Specifying a value for
 
 \item{ylim}{the y limits of the lvk and boot plots.}
 
+\item{legend.position}{the postion of the legend for classic plots.
+Default \code{legend.position="right"} alternatives include
+\code{legend.position="top"} and \code{legend.position="bottom"}}
+
 \item{backgroundColor}{The background colour for the main area
 of the chart. A simple HTML color string,
 for example: 'red' or '#00cc00'.  Default: 'null' (there is an
@@ -88,10 +98,10 @@ boot plot. Default = \code{FALSE}.}
 selection before a text label is shown.}
 
 \item{srt}{when \code{text=TRUE}, the angle of rotation for the text labels.
-Default = -30.}
+Default = 45.}
 
-\item{max.circle}{circles are scaled to make largest dimension this size in inches.
-Default = 0.35.}
+\item{max.circle}{determines the maximum circle size.
+Default = 15.}
 
 \item{print.full.model}{logical, when \code{text=TRUE} this determines if the full
 model gets a label or not.  Default=\code{FALSE}.}
@@ -103,6 +113,20 @@ Default = 0.1.}
 }
 \description{
 A plot method to visualise the results of a \code{vis} object.
+}
+\details{
+Specifying \code{which = "lvk"} generates a scatter plot where
+the points correspond to description loss is plot against model size
+for each model considered.  The \code{highlight} argument is
+used to differentiate models that contain a particular variable
+from those that do not.
+
+Specifying \code{which = "boot"} generates a scatter plot where
+each circle represents a model with a non-zero bootstrap probability,
+that is, each model that was selected as the best model of a
+particular dimension in at least one bootstrap replication.
+The area of each circle is proportional to the
+corresponding model's bootstrapped selection probability.
 }
 \examples{
 n = 100

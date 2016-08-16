@@ -4,10 +4,11 @@
 \alias{plot.af}
 \title{Plot diagnostics for an af object}
 \usage{
-\method{plot}{af}(x, pch, classic = FALSE, tag = NULL, shiny = FALSE,
-  best.only = TRUE, width = 800, height = 400, fontSize = 12,
-  left = 50, top = 30, chartWidth = "60\%", chartHeight = "80\%",
-  backgroundColor = "transparent", legend.position = "topleft",
+\method{plot}{af}(x, pch, interactive = FALSE, classic = NULL, tag = NULL,
+  shiny = FALSE, best.only = FALSE, width = 800, height = 400,
+  fontSize = 12, left = 50, top = 30, chartWidth = "60\%",
+  chartHeight = "80\%", backgroundColor = "transparent",
+  legend.position = "top", model.wrap = NULL, legend.space = NULL,
   options = NULL, ...)
 }
 \arguments{
@@ -15,16 +16,22 @@
 
 \item{pch}{plotting character, i.e., symbol to use}
 
-\item{classic}{logical.  If \code{classic=TRUE} a
+\item{interactive}{logical.  If \code{interactive=TRUE} a
+googleVis plot is provided instead of the base graphics plot.
+Default is \code{interactive=FALSE}.}
+
+\item{classic}{logical.  Depricated. If \code{classic=TRUE} a
 base graphics plot is provided instead of a googleVis plot.
-Default is \code{classic=FALSE}.}
+For now specifying \code{classic} will overwrite the
+default \code{interactive} behaviour, though this is
+likely to be removed in the future.}
 
-\item{tag}{Default NULL. Name tag of the objects to be extracted 
-from a gvis (googleVis) object. 
+\item{tag}{Default NULL. Name tag of the objects to be extracted
+from a gvis (googleVis) object.
 
-The default tag for is NULL, which will 
-result in R opening a browser window.  Setting \code{tag='chart'} 
-or setting \code{options(gvis.plot.tag='chart')} is useful when 
+The default tag for is NULL, which will
+result in R opening a browser window.  Setting \code{tag='chart'}
+or setting \code{options(gvis.plot.tag='chart')} is useful when
 googleVis is used in scripts, like knitr or rmarkdown.}
 
 \item{shiny}{Default FALSE. Set to TRUE when using in a shiny interface.}
@@ -64,13 +71,37 @@ for example: 'red' or '#00cc00'.  Default: 'transparent'}
 \item{legend.position}{legend position, e.g. \code{"topleft"}
 or  \code{"bottomright"}}
 
+\item{model.wrap}{Optional parameter to split the legend names
+if they are too long for classic plots.  \code{model.wrap=2}
+means that there will be two variables per line,  \code{model.wrap=2}
+gives three variables per line and \code{model.wrap=4} gives 4
+variables per line.}
+
+\item{legend.space}{Optional parameter to add additional space
+between the legend items for the classic plot.}
+
 \item{options}{If you want to specify the full set of googleVis
 options.}
 
 \item{...}{further arguments (currently unused)}
 }
 \description{
-Summary plot of the bootstrap results of an
-af object.
+Summary plot of the bootstrap results of an af object.
+}
+\details{
+For each value of \eqn{c}{c} a parametric
+bootstrap is performed under the full model.
+For each bootstrap
+sample we identify the smallest model inside the fence,
+\eqn{\hat{\alpha}(c)}{hat{alpha}(c)}.   We calculate the empirical probability of selecting
+model \eqn{\alpha}{alpha} for a given value of \eqn{c}{c} as
+\deqn{p^*(c,\alpha)=P^*\{\hat{\alpha}(c)=\alpha\}.}{p*(c,alpha)=P*{hat{alpha}(c)=alpha}.}
+Hence, if \eqn{B}{B} bootstrap replications are performed,
+\eqn{p^*(c,\alpha)}{p^*(c,alpha)} is the
+proportion of times that model \eqn{\alpha}{alpha} is selected.  Finally,
+define an overall selection probability,
+\deqn{p^*(c)=\max_{\alpha\in\mathcal{A}}p^*(c,\alpha)}{p*(c)=max_{alpha in mathcal{A}}p*(c,alpha)} and we plot
+\eqn{p^*(c)}{p*(c)} against \eqn{c}{c}. The points on the scatter plot are
+colour coded by the model that yielded the highest inclusion probability.
 }
 
