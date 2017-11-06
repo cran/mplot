@@ -5,7 +5,8 @@
 \title{Model stability and variable inclusion plots}
 \usage{
 vis(mf, nvmax, B = 100, lambda.max, nbest = "all", use.glmulti = FALSE,
-  cores, force.in = NULL, screen = FALSE, redundant = TRUE, ...)
+  cores, force.in = NULL, screen = FALSE, redundant = TRUE, seed = NULL,
+  ...)
 }
 \arguments{
 \item{mf}{a fitted 'full' model, the result of a call
@@ -39,6 +40,8 @@ Default = \code{FALSE}.}
 \item{redundant}{logical, whether or not to add a redundant
 variable.  Default = \code{TRUE}.}
 
+\item{seed}{random seed for reproducible results}
+
 \item{...}{further arguments (currently unused)}
 }
 \description{
@@ -64,11 +67,11 @@ x3 = x1^2
 x4 = x2^2
 x5 = x1*x2
 y = 1 + x1 + x2 + e
-dat = data.frame(y,x1,x2,x3,x4,x5)
-lm1 = lm(y~.,data=dat)
+dat = data.frame(y, x1, x2, x3, x4, x5)
+lm1 = lm(y ~ ., data = dat)
 \dontrun{
-v1 = vis(lm1)
-plot(v1,highlight="x1")
+v1 = vis(lm1, seed = 1)
+plot(v1, highlight = "x1")
 }
 }
 \references{
@@ -83,4 +86,3 @@ Mueller, S. and Welsh, A. H. (2010), On model
 \seealso{
 \code{\link{plot.vis}}
 }
-

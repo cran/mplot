@@ -1,6 +1,6 @@
 # mplot: graphical model stability and variable selection procedures
 
-[![Travis-CI Build Status](https://travis-ci.org/garthtarr/mplot.svg?branch=master)](https://travis-ci.org/garthtarr/mplot) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mplot)](http://cran.r-project.org/package=mplot) [![](http://cranlogs.r-pkg.org/badges/mplot)](http://cran.r-project.org/package=mplot) [![DL_Total](http://cranlogs.r-pkg.org/badges/grand-total/mplot?color=blue)](http://cran.r-project.org/package=mplot)
+[![Travis-CI Build Status](https://travis-ci.org/garthtarr/mplot.svg?branch=master)](https://travis-ci.org/garthtarr/mplot) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mplot)](https://cran.r-project.org/package=mplot) [![](http://cranlogs.r-pkg.org/badges/mplot)](https://cran.r-project.org/package=mplot) [![DL_Total](http://cranlogs.r-pkg.org/badges/grand-total/mplot?color=blue)](https://cran.r-project.org/package=mplot)
 
 The `mplot` package provides a collection of functions designed for exploratory model selection.
 
@@ -20,7 +20,7 @@ update.packages()
 
 ### Stable release on CRAN
 
-The mplot package is now on CRAN:
+The mplot package has been on [CRAN](https://cran.r-project.org/package=mplot) since June 2015.  You can install it from CRAN in the usual way:
 
 ```s
 install.packages("mplot")
@@ -29,7 +29,7 @@ require("mplot")
 
 ### Development version on Github
 
-You can use the `devtools` package to install the development version of `mplot` from [Github](https://github.com/garthtarr/mplot):
+You can use the **devtools** package to install the development version of **mplot** from [GitHub](https://github.com/garthtarr/mplot):
 
 ```s
 # install.packages("devtools")
@@ -39,20 +39,13 @@ require(mplot)
 
 ## Usage
 
-```s
-require(mplot)
-?af
-?vis
-?mplot
-```
+A reference manual is available at [garthtarr.github.io/mplot](http://garthtarr.github.io/mplot/)
 
 ## Citation
 
 If you use this package to inform your model selection choices, please use the following citation:
 
-* Tarr G, Mueller S and Welsh A (2015). “mplot: An R package for graphical model
-stability and variable selection.” arXiv:1509.07583 [stat.ME], < URL:
-http://arxiv.org/abs/1509.07583 >.
+* Tarr G, Mueller S and Welsh AH (2017). “mplot: An R package for graphical model stability and variable selection.” _Journal of Statistical Software_. In press, <URL: http://arxiv.org/abs/1509.07583>.
 
 From R you can use:
 
@@ -61,13 +54,3 @@ citation("mplot")
 toBibtex(citation("mplot"))
 ```
 
-## Uninstall
-
-After you've used the development version you may like to remove it to avoid any potential conflicts in the future:
-
-```s
-detach("package:mplot", unload=TRUE)
-remove.packages("mplot")
-```
-
-If you do this, then the next time you want to use it, you'll need to install the package again.

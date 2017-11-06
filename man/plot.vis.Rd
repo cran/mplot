@@ -5,13 +5,13 @@
 \title{Plot diagnostics for a vis object}
 \usage{
 \method{plot}{vis}(x, highlight, interactive = FALSE, classic = NULL,
-  tag = NULL, shiny = FALSE, which = c("vip", "lvk", "boot"),
-  width = 800, height = 400, fontSize = 12, left = 50, top = 30,
-  chartWidth = "60\%", chartHeight = "80\%", axisTitlesPosition = "out",
-  dataOpacity = 0.5, options = NULL, ylim, legend.position = "right",
-  backgroundColor = "transparent", text = FALSE, min.prob = 0.4,
-  srt = 45, max.circle = 15, print.full.model = FALSE, jitterk = 0.1,
-  ...)
+  tag = NULL, shiny = FALSE, nbest = "all", which = c("vip", "lvk",
+  "boot"), width = 800, height = 400, fontSize = 12, left = 50,
+  top = 30, chartWidth = "60\%", chartHeight = "80\%",
+  axisTitlesPosition = "out", dataOpacity = 0.5, options = NULL, ylim,
+  legend.position = "right", backgroundColor = "transparent",
+  text = FALSE, min.prob = 0.4, srt = 45, max.circle = 15,
+  print.full.model = FALSE, jitterk = 0.1, ...)
 }
 \arguments{
 \item{x}{\code{vis} object, the result of \code{\link{vis}}}
@@ -37,6 +37,10 @@ or setting \code{options(gvis.plot.tag='chart')} is useful when
 googleVis is used in scripts, like knitr or rmarkdown.}
 
 \item{shiny}{Default FALSE. Set to TRUE when using in a shiny interface.}
+
+\item{nbest}{maximum number of models at each model size
+that will be considered for the lvk plot. Can also take
+a value of \code{"all"} which displays all models (default).}
 
 \item{which}{a vector specifying the plots to be output.  Variable
 inclusion plots \code{which="vip"}; description loss against model
@@ -157,4 +161,3 @@ Mueller, S. and Welsh, A. H. (2010), On model
 \seealso{
 \code{\link{vis}}
 }
-

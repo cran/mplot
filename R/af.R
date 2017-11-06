@@ -73,6 +73,7 @@
 #' @param screen logical, whether or not to perform an initial
 #'   screen for outliers.  Highly experimental, use at own risk.
 #'   Default = FALSE.
+#' @param seed random seed for reproducible results
 #' @param ... further arguments (currently unused)
 #' @seealso \code{\link{plot.af}}
 #' @references Jiang J., Nguyen T., Sunil Rao J. (2009),
@@ -95,12 +96,12 @@
 #' x3 = x1^2
 #' x4 = x2^2
 #' x5 = x1*x2
-#' x6 = rep(c("A","B"),n=50)
+#' x6 = rep(c("A", "B"), n = 50)
 #' y = 1 + x1 + x2 + e
 #' dat = data.frame(y,x1,x2,x3,x4,x5,x6)
-#' lm1 = lm(y~.,data=dat)
+#' lm1 = lm(y ~ ., data = dat)
 #' \dontrun{
-#' af1 = af(lm1, cores=4, initial.stepwise=TRUE)
+#' af1 = af(lm1, cores = 4, initial.stepwise = TRUE, seed = 1)
 #' summary(af1)
 #' plot(af1)
 #' }
@@ -114,7 +115,9 @@ af = function(mf,
               nvmax,
               c.max,
               screen = FALSE,
+              seed = NULL,
               ...) {
+  set.seed(seed)
   method = "ML"
   af.call = match.call()
   if (!missing(c.max) & initial.stepwise == TRUE) {
@@ -245,7 +248,8 @@ af = function(mf,
   j = NULL # avoid global variable NOTE in R CMD check
   p.star.all = foreach(j = 1:n.c,
                        .combine = rbind,
-                       .packages = c("mplot")) %dopar% {
+                       .packages = c("mplot"),
+                       .options.RNG=seed) %dorng% {
                          fence.mod = list()
                          fence.rank = list()
                          ystar = stats::simulate(object = mfstar, nsim = B)
@@ -311,7 +315,7 @@ af = function(mf,
     redundent.vars = grepl("REDUNDANT.VARIABLE", as.character(p.star$model))
     c.range = c.range[!redundent.vars]
     p.star = p.star[!redundent.vars, ]
-    p.star$model = droplevels(p.star$model)
+    p.star$model = droplevels(as.factor(p.star$model))
     # if want runs of (near) maximums
     max.p = max(p.star[, 1]) #- 2/B
     tf = p.star[, 1] >= max.p

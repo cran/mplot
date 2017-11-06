@@ -5,7 +5,7 @@
 \title{The adaptive fence procedure}
 \usage{
 af(mf, B = 60, n.c = 20, initial.stepwise = FALSE, force.in = NULL,
-  cores, nvmax, c.max, screen = FALSE, ...)
+  cores, nvmax, c.max, screen = FALSE, seed = NULL, ...)
 }
 \arguments{
 \item{mf}{a fitted 'full' model, the result of a call
@@ -37,6 +37,8 @@ Only applies when \code{initial.stepwise=FALSE}.}
 \item{screen}{logical, whether or not to perform an initial
 screen for outliers.  Highly experimental, use at own risk.
 Default = FALSE.}
+
+\item{seed}{random seed for reproducible results}
 
 \item{...}{further arguments (currently unused)}
 }
@@ -103,12 +105,12 @@ x2 = rnorm(n)
 x3 = x1^2
 x4 = x2^2
 x5 = x1*x2
-x6 = rep(c("A","B"),n=50)
+x6 = rep(c("A", "B"), n = 50)
 y = 1 + x1 + x2 + e
 dat = data.frame(y,x1,x2,x3,x4,x5,x6)
-lm1 = lm(y~.,data=dat)
+lm1 = lm(y ~ ., data = dat)
 \dontrun{
-af1 = af(lm1, cores=4, initial.stepwise=TRUE)
+af1 = af(lm1, cores = 4, initial.stepwise = TRUE, seed = 1)
 summary(af1)
 plot(af1)
 }
@@ -125,4 +127,3 @@ Jiang J., Nguyen T., Sunil Rao J. (2009),
 \seealso{
 \code{\link{plot.af}}
 }
-
