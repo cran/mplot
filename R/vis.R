@@ -42,6 +42,10 @@
 #'   Murray, K., Heritier, S. and Mueller, S. (2013), Graphical
 #'   tools for model selection in generalized linear models.
 #'   Statistics in Medicine, 32:4438-4451. doi: 10.1002/sim.5855
+#'   
+#'   Tarr G, Mueller S and Welsh AH (2018). mplot: An R Package for 
+#'   Graphical Model Stability and Variable Selection Procedures. 
+#'   Journal of Statistical Software, 83(9), pp. 1-28. doi: 10.18637/jss.v083.i09
 #' @export
 #' @import foreach
 #' @import parallel
@@ -57,9 +61,17 @@
 #' y = 1 + x1 + x2 + e
 #' dat = data.frame(y, x1, x2, x3, x4, x5)
 #' lm1 = lm(y ~ ., data = dat)
+#' \dontshow{
+#' v1 = vis(lm1, B = 5, cores = 1, seed = 1)
+#' plot(v1, highlight = "x1", which = "lvk")
+#' plot(v1, which = "boot")
+#' plot(v1, which = "vip")
+#' }
 #' \dontrun{
 #' v1 = vis(lm1, seed = 1)
-#' plot(v1, highlight = "x1")
+#' plot(v1, highlight = "x1", which = "lvk")
+#' plot(v1, which = "boot")
+#' plot(v1, which = "vip")
 #' }
 
 vis = function(mf,
@@ -602,6 +614,10 @@ vis = function(mf,
 #'   Murray, K., Heritier, S. and Mueller, S. (2013), Graphical
 #'   tools for model selection in generalized linear models.
 #'   Statistics in Medicine, 32:4438-4451. doi: 10.1002/sim.5855
+#'   
+#'   Tarr G, Mueller S and Welsh AH (2018). mplot: An R Package for 
+#'   Graphical Model Stability and Variable Selection Procedures. 
+#'   Journal of Statistical Software, 83(9), pp. 1-28. doi: 10.18637/jss.v083.i09
 #' @export
 #' @examples
 #' n = 100
@@ -615,11 +631,18 @@ vis = function(mf,
 #' y = 1 + x1 + x2 + e
 #' dat = data.frame(y,x1,x2,x3,x4,x5)
 #' lm1 = lm(y~.,data=dat)
-#' \dontrun{
-#' v1 = vis(lm1)
-#' plot(v1,highlight="x1",which="lvk")
+#' \dontshow{
+#' v1 = vis(lm1, B = 5, cores = 1, seed = 1)
+#' plot(v1, highlight = "x1", which = "lvk")
+#' plot(v1, which = "boot")
+#' plot(v1, which = "vip")
 #' }
-
+#' \dontrun{
+#' v1 = vis(lm1, seed = 1)
+#' plot(v1, highlight = "x1", which = "lvk")
+#' plot(v1, which = "boot")
+#' plot(v1, which = "vip")
+#' }
 plot.vis = function(x,
                     highlight,
                     interactive = FALSE,

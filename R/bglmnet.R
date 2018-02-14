@@ -41,14 +41,15 @@
 #' y = 1 + x1 + x2 + e
 #' dat = data.frame(y, x1, x2, x3, x4, x5)
 #' lm1 = lm(y ~ ., data = dat)
+#' \dontshow{
+#' bg1 = bglmnet(lm1, seed = 1, B=10)
+#' plot(bg1)
+#' }
 #' \dontrun{
 #' bg1 = bglmnet(lm1, seed = 1)
-#' plot(bg1)
-#' plot(bg1, which = "boot_size", interactive = TRUE)
+#' # plot(bg1, which = "boot_size", interactive = TRUE)
 #' plot(bg1, which = "boot_size", interactive = FALSE)
-#' plot(bg1, which = "boot", interactive = TRUE)
-#' plot(bg1, which = "boot", interactive = FALSE)
-#' plot(bg1, which = "vip", interactive = TRUE)
+#' # plot(bg1, which = "vip", interactive = TRUE)
 #' plot(bg1, which = "vip", interactive = FALSE)
 #' }
 
@@ -220,8 +221,10 @@ bglmnet = function(mf, nlambda = 100, lambda = NULL, B = 100,
 #' @param shiny Default FALSE. Set to TRUE when using in a shiny interface.
 #' 
 #' @param which a vector specifying the plots to be output. Variable
-#'   inclusion type plots \code{which="vip"} or model description loss against
-#'   penalty parameter \code{which="boot"}.
+#'   inclusion type plots \code{which = "vip"} or plots where the size
+#'   of the point representing each model is proportional to selection 
+#'   probabilities by model size \code{which = "boot_size"} 
+#'   or by penalty paramter \code{which = "boot"}.
 #' @param width Width of the googleVis chart canvas area, in pixels.
 #'   Default: 800.
 #' @param height Height of the googleVis chart canvas area, in pixels.
@@ -274,7 +277,7 @@ bglmnet = function(mf, nlambda = 100, lambda = NULL, B = 100,
 plot.bglmnet = function(x, highlight, interactive = FALSE, 
                         classic = NULL, 
                         tag = NULL, shiny = FALSE,
-                        which=c("boot","vip","lvk"),
+                        which=c("vip","boot","boot_size"),
                         width=800, height=400, fontSize=12,
                         left=50, top=30,
                         chartWidth="60%",
@@ -323,6 +326,76 @@ plot.bglmnet = function(x, highlight, interactive = FALSE,
                       domain = c(1e-100, Inf))
   }
   
+  
+  if ("vip" %in% which) {
+    
+    var.names = x$vars[x$vars != "(Intercept)"]
+    p.var = t(x$freq)
+    p.var = p.var[,colnames(p.var) %in% var.names]
+    sortnames = names(sort(apply(p.var, 2, mean), decreasing = TRUE))
+    vip.df = p.var[,sortnames]
+    rownames(vip.df) = NULL
+    vip.df = data.frame(lambda = x$lambda, vip.df)
+    #tid = c(1,2,4,6:dim(vip.df)[2])
+    #vip.df[, tid] = sapply(vip.df[, tid], as.numeric)
+    colnames(vip.df) = gsub("REDUNDANT.VARIABLE", "RV", colnames(vip.df))
+    sortnames = gsub("REDUNDANT.VARIABLE", "RV", sortnames)
+    if(!interactive) { 
+      lambda = NULL # hack for no visible binding for global variable 'lambda'
+      ggdat = vip.df %>% 
+        tidyr::gather(-lambda, key = "variable", value = "prob")
+      p = ggplot2::ggplot(
+        data = ggdat,
+        ggplot2::aes_string(
+          x = "lambda",
+          y = "prob",
+          colour = "variable"
+        )
+      ) +
+        ggplot2::geom_line() +
+        ggplot2::theme_bw(base_size = 14) +
+        ggplot2::labs(y = "Bootstrap inclusion probability",
+                      x = "Penalty") +
+        ggplot2::scale_x_log10() +
+        ggplot2::theme(
+          legend.title = ggplot2::element_blank(),
+          legend.key = ggplot2::element_blank(),
+          legend.position = legend.position
+        )
+      
+      return(p)
+      
+    } else { # interactive = TRUE
+      
+      gvis.title = "Variable inclusion plot (lasso)"
+      chartArea = paste("{left:",left,
+                        ",top:",top,
+                        ",width:'",chartWidth,
+                        "',height:'",chartHeight,"'}", sep = "")
+      if (is.null(options)) {
+        use.options = list(title = gvis.title,
+                           fontSize = fontSize,
+                           vAxis = "{title:'Bootstrapped probability'}",
+                           hAxis = gvis.hAxis,
+                           sizeAxis = "{minValue: 0, minSize: 1,
+                           maxSize: 20, maxValue:1}",
+                           axisTitlesPosition = axisTitlesPosition,
+                           chartArea = chartArea,
+                           width = width, height = height,
+                           backgroundColor = backgroundColor,
+                           annotations = "{style:'line'}")
+    } else {use.options = options}
+      fplot = googleVis::gvisLineChart(data = vip.df,
+                                       xvar = "lambda",
+                                       yvar = sortnames,
+                                       options = use.options)
+      if(shiny){
+        return(fplot)
+      } else {
+        return(graphics::plot(fplot, tag = tag))
+      }
+    }
+  }
   
   if("boot" %in% which){
     
@@ -548,76 +621,6 @@ plot.bglmnet = function(x, highlight, interactive = FALSE,
         return(fplot)
       } else {
         graphics::plot(fplot, tag = tag)
-      }
-    }
-  }
-  
-  if ("vip" %in% which) {
-    
-    var.names = x$vars[x$vars != "(Intercept)"]
-    p.var = t(x$freq)
-    p.var = p.var[,colnames(p.var) %in% var.names]
-    sortnames = names(sort(apply(p.var, 2, mean), decreasing = TRUE))
-    vip.df = p.var[,sortnames]
-    rownames(vip.df) = NULL
-    vip.df = data.frame(lambda = x$lambda, vip.df)
-    #tid = c(1,2,4,6:dim(vip.df)[2])
-    #vip.df[, tid] = sapply(vip.df[, tid], as.numeric)
-    colnames(vip.df) = gsub("REDUNDANT.VARIABLE", "RV", colnames(vip.df))
-    sortnames = gsub("REDUNDANT.VARIABLE", "RV", sortnames)
-    if(!interactive) { 
-      lambda = NULL # hack for no visible binding for global variable 'lambda'
-      ggdat = vip.df %>% 
-        tidyr::gather(-lambda, key = "variable", value = "prob")
-      p = ggplot2::ggplot(
-        data = ggdat,
-        ggplot2::aes_string(
-          x = "lambda",
-          y = "prob",
-          colour = "variable"
-        )
-      ) +
-        ggplot2::geom_line() +
-        ggplot2::theme_bw(base_size = 14) +
-        ggplot2::labs(y = "Bootstrap inclusion probability",
-                      x = "Penalty") +
-        ggplot2::scale_x_log10() +
-        ggplot2::theme(
-          legend.title = ggplot2::element_blank(),
-          legend.key = ggplot2::element_blank(),
-          legend.position = legend.position
-        )
-      
-      return(p)
-      
-    } else { # interactive = TRUE
-      
-      gvis.title = "Variable inclusion plot (lasso)"
-      chartArea = paste("{left:",left,
-                        ",top:",top,
-                        ",width:'",chartWidth,
-                        "',height:'",chartHeight,"'}", sep = "")
-      if (is.null(options)) {
-        use.options = list(title = gvis.title,
-                           fontSize = fontSize,
-                           vAxis = "{title:'Bootstrapped probability'}",
-                           hAxis = gvis.hAxis,
-                           sizeAxis = "{minValue: 0, minSize: 1,
-                           maxSize: 20, maxValue:1}",
-                           axisTitlesPosition = axisTitlesPosition,
-                           chartArea = chartArea,
-                           width = width, height = height,
-                           backgroundColor = backgroundColor,
-                           annotations = "{style:'line'}")
-      } else {use.options = options}
-      fplot = googleVis::gvisLineChart(data = vip.df,
-                                       xvar = "lambda",
-                                       yvar = sortnames,
-                                       options = use.options)
-      if(shiny){
-        return(fplot)
-      } else {
-        return(graphics::plot(fplot, tag = tag))
       }
     }
   } else return(invisible())

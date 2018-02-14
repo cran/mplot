@@ -4,6 +4,9 @@
 #' @docType package
 #' @title Graphical model stability and model selection procedures
 #' @keywords package
+#' @references Tarr G, Mueller S and Welsh AH (2018). mplot: An R Package for 
+#'   Graphical Model Stability and Variable Selection Procedures. 
+#'   Journal of Statistical Software, 83(9), pp. 1-28. doi: 10.18637/jss.v083.i09
 NULL
 
 #' Body fat data set
@@ -154,7 +157,6 @@ NULL
 #' data(artificialeg)
 #' full.mod = lm(y~.,data=artificialeg)
 #' step(full.mod)
-#' \dontrun{
 #' # generating model
 #' n=50
 #' set.seed(8) # a seed of 2 also works
@@ -169,7 +171,6 @@ NULL
 #' x8 = x1 + x2 -2*x3 - 0.3*x4 + x5 - 1.6*x6 - 1*x7 + x9 +rnorm(n,0,0.5)
 #' y = 0.6*x8 + rnorm(n,0,2)
 #' artificialeg = round(data.frame(x1,x2,x3,x4,x5,x6,x7,x8,x9,y),1)
-#' }
 NULL
 
 

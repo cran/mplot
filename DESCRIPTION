@@ -1,8 +1,8 @@
 Package: mplot
 Type: Package
 Title: Graphical Model Stability and Variable Selection Procedures
-Version: 0.8.2
-Date: 2017-11-18
+Version: 1.0.1
+Date: 2018-02-14
 Authors@R: c(person("Garth", "Tarr", role = c("aut", "cre"), email = "garth.tarr@gmail.com"), person("Samuel", "Mueller", role = "aut", email = "samuel.mueller@sydney.edu.au"), person("Alan H", "Welsh", role = "aut", email = "alan.welsh@anu.edu.au"))
 Description: Model stability and variable inclusion plots [Mueller and Welsh
     (2010, <doi:10.1111/j.1751-5823.2010.00108.x>); Murray, Heritier and Mueller
@@ -19,10 +19,10 @@ URL: http://garthtarr.github.io/mplot,
 LazyData: TRUE
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-01-05 05:42:19 UTC; garthtarr
+Packaged: 2018-02-14 02:37:41 UTC; garthtarr
 Author: Garth Tarr [aut, cre],
   Samuel Mueller [aut],
   Alan H Welsh [aut]
 Maintainer: Garth Tarr <garth.tarr@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-01-05 09:29:01 UTC
+Date/Publication: 2018-02-14 16:29:04 UTC

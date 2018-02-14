@@ -9,6 +9,9 @@
 #' @export
 #' @import shiny
 #' @import shinydashboard
+#' @references Tarr G, Mueller S and Welsh AH (2018). mplot: An R Package for 
+#'   Graphical Model Stability and Variable Selection Procedures. 
+#'   Journal of Statistical Software, 83(9), pp. 1-28. doi: 10.18637/jss.v083.i09
 #' @examples
 #' n = 100
 #' set.seed(11)
@@ -20,11 +23,11 @@
 #' x5 = x1*x2
 #' y = 1 + x1 + x2 + e
 #' dat = round(data.frame(y,x1,x2,x3,x4,x5),2)
-#' lm1 = lm(y~.,data=dat)
+#' lm1 = lm(y ~ ., data = dat)
 #' \dontrun{
-#' v1 = vis(lm1,n.cores=3)
-#' af1 = af(lm1,n.cores=3)
-#' mplot(lm1,v1,af1)
+#' v1 = vis(lm1, cores = 3)
+#' af1 = af(lm1, cores = 3)
+#' mplot(lm1, v1, af1)
 #' }
 #'
 
